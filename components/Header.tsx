@@ -1,0 +1,201 @@
+'use client';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ShoppingCart, MessageSquare, Menu, X, ChevronDown, Phone, Search } from 'lucide-react';
+import { CATEGORIES } from '@/lib/data';
+
+export default function Header() {
+  const [scrolled, setScrolled]     = useState(false);
+  const [menuOpen, setMenuOpen]     = useState(false);
+  const [megaOpen, setMegaOpen]     = useState(false);
+  const [cartCount]                 = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <>
+      {/* Top bar */}
+      <div className="bg-navy-900 text-white/70 text-xs py-2 hidden md:block" style={{ background: '#080d1a' }}>
+        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+          <div className="flex items-center gap-6">
+            <span className="flex items-center gap-1.5">
+              <Phone size={11} />
+              <a href="tel:+919960937588" className="hover:text-gold-400 transition-colors" style={{ color: 'inherit' }}>+91 9960 937 588</a>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Phone size={11} />
+              <a href="tel:+918329369356" className="hover:text-gold-400 transition-colors" style={{ color: 'inherit' }}>+91 8329 369 356</a>
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <a href="mailto:sales@modigold.in" className="hover:text-gold-400 transition-colors" style={{ color: 'inherit' }}>sales@modigold.in</a>
+            <span className="text-white/30">|</span>
+            <span>Factory: Butibori, Nagpur</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main header */}
+      <header
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          scrolled ? 'shadow-xl' : ''
+        }`}
+        style={{ background: scrolled ? '#fff' : '#fff' }}
+      >
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <div className="flex items-center justify-between h-18 py-3">
+
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-3 shrink-0">
+              <div
+                className="relative"
+                style={{ width: 160, height: 54 }}
+              >
+                <Image
+                  src="https://www.modigold.in/wp-content/uploads/2021/12/Modi-Gold-Logo1-1.png"
+                  alt="Modigold Pipes"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </Link>
+
+            {/* Desktop Nav */}
+            <nav className="hidden lg:flex items-center gap-1">
+              <Link href="/" className="nav-link px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors">Home</Link>
+
+              {/* Products mega menu trigger */}
+              <div className="relative" onMouseEnter={() => setMegaOpen(true)} onMouseLeave={() => setMegaOpen(false)}>
+                <button
+                  className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors"
+                >
+                  Products <ChevronDown size={14} className={`transition-transform ${megaOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Mega menu */}
+                {megaOpen && (
+                  <div
+                    className="absolute top-full left-1/2 -translate-x-1/2 bg-white shadow-2xl z-50 w-[680px]"
+                    style={{ borderTop: '2px solid #C9A84C' }}
+                  >
+                    <div className="p-6 grid grid-cols-2 gap-x-8 gap-y-1">
+                      <div className="col-span-2 mb-3 pb-3" style={{ borderBottom: '1px solid #f1f1f1' }}>
+                        <span className="section-label" style={{ marginBottom: 0 }}>Product Categories</span>
+                      </div>
+                      {CATEGORIES.map((cat) => (
+                        <Link
+                          key={cat.id}
+                          href={`/shop?category=${cat.slug}`}
+                          className="flex items-start gap-3 p-3 hover:bg-gold-50 transition-colors rounded group"
+                          onClick={() => setMegaOpen(false)}
+                        >
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5" style={{ background: '#fdf8ec' }}>
+                            <CategoryIcon name={cat.icon} />
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold text-navy-500 group-hover:text-gold-500 transition-colors">{cat.name}</div>
+                            <div className="text-xs text-gray-500 mt-0.5 leading-snug line-clamp-1">{cat.description}</div>
+                          </div>
+                        </Link>
+                      ))}
+                      <div className="col-span-2 mt-3 pt-3" style={{ borderTop: '1px solid #f1f1f1' }}>
+                        <Link href="/shop" className="btn-gold text-xs py-2 px-5" onClick={() => setMegaOpen(false)}>
+                          View All Products →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <Link href="/shop" className="px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors">Shop</Link>
+              <Link href="/about" className="px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors">About</Link>
+              <Link href="/contact" className="px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors">Contact</Link>
+            </nav>
+
+            {/* Right actions */}
+            <div className="flex items-center gap-3">
+              <Link href="/shop" className="hidden md:flex p-2 text-navy-500 hover:text-gold-400 transition-colors" aria-label="Search">
+                <Search size={20} />
+              </Link>
+              <Link href="/enquiry" className="hidden md:flex btn-outline-gold py-2 px-4 text-xs">
+                Get a Quote
+              </Link>
+              <Link href="/cart" className="relative p-2 text-navy-500 hover:text-gold-400 transition-colors" aria-label="Cart">
+                <ShoppingCart size={22} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold"
+                    style={{ background: '#C9A84C' }}>
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+              <button
+                className="lg:hidden p-2 text-navy-500"
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Menu"
+              >
+                {menuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div className="lg:hidden bg-white border-t" style={{ borderColor: '#C9A84C' }}>
+            <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
+              {[
+                { href: '/', label: 'Home' },
+                { href: '/shop', label: 'Shop All Products' },
+                { href: '/about', label: 'About Us' },
+                { href: '/enquiry', label: 'Get a Quote' },
+                { href: '/contact', label: 'Contact' },
+                { href: '/track-order', label: 'Track Order' },
+              ].map(({ href, label }) => (
+                <Link key={href} href={href}
+                  className="py-3 px-2 text-navy-500 font-medium border-b text-sm"
+                  style={{ borderColor: '#f1f1f1' }}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {label}
+                </Link>
+              ))}
+              <div className="pt-3 font-semibold text-xs text-gold-400 uppercase tracking-widest">Categories</div>
+              {CATEGORIES.map((cat) => (
+                <Link key={cat.id} href={`/shop?category=${cat.slug}`}
+                  className="py-2 px-2 text-sm text-navy-600 border-b"
+                  style={{ borderColor: '#f1f1f1' }}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {cat.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </header>
+    </>
+  );
+}
+
+function CategoryIcon({ name }: { name: string }) {
+  const cls = "w-4 h-4 text-gold-500";
+  const icons: Record<string, React.ReactElement> = {
+    pipe:     <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>,
+    pipeline: <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" /></svg>,
+    layers:   <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>,
+    droplets: <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" /></svg>,
+    wave:     <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2 12s2.5-5 5-5 5 10 10 10 5-5 5-5" /></svg>,
+    sun:      <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="4"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2v2m0 16v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M2 12h2m16 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></svg>,
+    shield:   <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>,
+    cylinder: <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7c0-1.657 3.582-3 8-3s8 1.343 8 3v10c0 1.657-3.582 3-8 3s-8-1.343-8-3V7z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7c0 1.657 3.582 3 8 3s8-1.343 8-3" /></svg>,
+  };
+  return icons[name] ?? icons.pipe;
+}
