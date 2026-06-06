@@ -351,7 +351,7 @@ export default function AnalyticsSection() {
                   <Cell key={i} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip formatter={(v: number) => `${v}%`} />
+              <Tooltip formatter={(v) => [`${v}%`]} />
             </PieChart>
           </ResponsiveContainer>
 
@@ -447,7 +447,7 @@ export default function AnalyticsSection() {
                   <Cell key={i} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip formatter={(v: number) => `${v}%`} />
+              <Tooltip formatter={(v) => [`${v}%`]} />
             </PieChart>
           </ResponsiveContainer>
 
