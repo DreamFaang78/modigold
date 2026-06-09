@@ -3,9 +3,25 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingCart, MessageSquare, Menu, X, ChevronDown, Phone, Search } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES } from '@/lib/data';
 
-export default function Header() {
+interface HeaderBrand {
+  phonePrimary?: string;
+  phoneSecondary?: string;
+  email?: string;
+  addressFactory?: string;
+}
+
+const DEFAULTS: Required<HeaderBrand> = {
+  phonePrimary:   '+91 9960 937 588',
+  phoneSecondary: '+91 8329 369 356',
+  email:          'sales@modigold.in',
+  addressFactory: 'Factory: Butibori, Nagpur',
+};
+
+export default function Header({ brand }: { brand?: HeaderBrand }) {
+  const b = { ...DEFAULTS, ...brand };
   const [scrolled, setScrolled]     = useState(false);
   const [menuOpen, setMenuOpen]     = useState(false);
   const [megaOpen, setMegaOpen]     = useState(false);
@@ -25,17 +41,17 @@ export default function Header() {
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-1.5">
               <Phone size={11} />
-              <a href="tel:+919960937588" className="hover:text-gold-400 transition-colors" style={{ color: 'inherit' }}>+91 9960 937 588</a>
+              <a href={`tel:${b.phonePrimary.replace(/\s/g,'')}`} className="hover:text-gold-400 transition-colors" style={{ color: 'inherit' }}>{b.phonePrimary}</a>
             </span>
             <span className="flex items-center gap-1.5">
               <Phone size={11} />
-              <a href="tel:+918329369356" className="hover:text-gold-400 transition-colors" style={{ color: 'inherit' }}>+91 8329 369 356</a>
+              <a href={`tel:${b.phoneSecondary.replace(/\s/g,'')}`} className="hover:text-gold-400 transition-colors" style={{ color: 'inherit' }}>{b.phoneSecondary}</a>
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="mailto:sales@modigold.in" className="hover:text-gold-400 transition-colors" style={{ color: 'inherit' }}>sales@modigold.in</a>
+            <a href={`mailto:${b.email}`} className="hover:text-gold-400 transition-colors" style={{ color: 'inherit' }}>{b.email}</a>
             <span className="text-white/30">|</span>
-            <span>Factory: Butibori, Nagpur</span>
+            <span>{b.addressFactory}</span>
           </div>
         </div>
       </div>
@@ -43,9 +59,12 @@ export default function Header() {
       {/* Main header */}
       <header
         className={`sticky top-0 z-50 transition-all duration-300 ${
-          scrolled ? 'shadow-xl' : ''
+          scrolled ? 'shadow-xl glass-panel' : 'bg-white'
         }`}
-        style={{ background: scrolled ? '#fff' : '#fff' }}
+        style={scrolled
+          ? { borderBottom: '1px solid rgba(201,168,76,0.18)' }
+          : { borderBottom: '1px solid rgba(201,168,76,0.08)' }
+        }
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-18 py-3">
@@ -54,7 +73,7 @@ export default function Header() {
             <Link href="/" className="flex items-center gap-3 shrink-0">
               <div
                 className="relative"
-                style={{ width: 160, height: 54 }}
+                style={{ width: 120, height: 42 }}
               >
                 <Image
                   src="https://www.modigold.in/wp-content/uploads/2021/12/Modi-Gold-Logo1-1.png"
@@ -62,13 +81,14 @@ export default function Header() {
                   fill
                   className="object-contain"
                   priority
+                  sizes="(max-width: 768px) 120px, 160px"
                 />
               </div>
             </Link>
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-1">
-              <Link href="/" className="nav-link px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors">Home</Link>
+              <Link href="/" className="nav-link px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors focus-gold rounded">Home</Link>
 
               {/* Products mega menu trigger */}
               <div className="relative" onMouseEnter={() => setMegaOpen(true)} onMouseLeave={() => setMegaOpen(false)}>
@@ -79,44 +99,50 @@ export default function Header() {
                 </button>
 
                 {/* Mega menu */}
-                {megaOpen && (
-                  <div
-                    className="absolute top-full left-1/2 -translate-x-1/2 bg-white shadow-2xl z-50 w-[680px]"
-                    style={{ borderTop: '2px solid #C9A84C' }}
-                  >
-                    <div className="p-6 grid grid-cols-2 gap-x-8 gap-y-1">
-                      <div className="col-span-2 mb-3 pb-3" style={{ borderBottom: '1px solid #f1f1f1' }}>
-                        <span className="section-label" style={{ marginBottom: 0 }}>Product Categories</span>
+                <AnimatePresence>
+                  {megaOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 bg-white shadow-2xl z-50 w-[680px] rounded-b-xl overflow-hidden"
+                      style={{ borderTop: '2px solid var(--color-gold-400)' }}
+                    >
+                      <div className="p-6 grid grid-cols-2 gap-x-8 gap-y-1">
+                        <div className="col-span-2 mb-3 pb-3" style={{ borderBottom: '1px solid #f1f1f1' }}>
+                          <span className="section-label" style={{ marginBottom: 0 }}>Product Categories</span>
+                        </div>
+                        {CATEGORIES.map((cat) => (
+                          <Link
+                            key={cat.id}
+                            href={`/shop?category=${cat.slug}`}
+                            className="flex items-start gap-3 p-3 hover:bg-gold-50 transition-colors rounded group"
+                            onClick={() => setMegaOpen(false)}
+                          >
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 icon-glow" style={{ background: 'var(--color-gold-50)' }}>
+                              <CategoryIcon name={cat.icon} />
+                            </div>
+                            <div>
+                              <div className="text-sm font-semibold text-navy-500 group-hover:text-gold-500 transition-colors">{cat.name}</div>
+                              <div className="text-xs text-gray-500 mt-0.5 leading-snug line-clamp-1">{cat.description}</div>
+                            </div>
+                          </Link>
+                        ))}
+                        <div className="col-span-2 mt-3 pt-3" style={{ borderTop: '1px solid #f1f1f1' }}>
+                          <Link href="/shop" className="btn-gold text-xs py-2 px-5 rounded" onClick={() => setMegaOpen(false)}>
+                            View All Products →
+                          </Link>
+                        </div>
                       </div>
-                      {CATEGORIES.map((cat) => (
-                        <Link
-                          key={cat.id}
-                          href={`/shop?category=${cat.slug}`}
-                          className="flex items-start gap-3 p-3 hover:bg-gold-50 transition-colors rounded group"
-                          onClick={() => setMegaOpen(false)}
-                        >
-                          <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5" style={{ background: '#fdf8ec' }}>
-                            <CategoryIcon name={cat.icon} />
-                          </div>
-                          <div>
-                            <div className="text-sm font-semibold text-navy-500 group-hover:text-gold-500 transition-colors">{cat.name}</div>
-                            <div className="text-xs text-gray-500 mt-0.5 leading-snug line-clamp-1">{cat.description}</div>
-                          </div>
-                        </Link>
-                      ))}
-                      <div className="col-span-2 mt-3 pt-3" style={{ borderTop: '1px solid #f1f1f1' }}>
-                        <Link href="/shop" className="btn-gold text-xs py-2 px-5" onClick={() => setMegaOpen(false)}>
-                          View All Products →
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-              <Link href="/shop" className="px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors">Shop</Link>
-              <Link href="/about" className="px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors">About</Link>
-              <Link href="/contact" className="px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors">Contact</Link>
+              <Link href="/shop" className="px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors focus-gold rounded">Shop</Link>
+              <Link href="/about" className="px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors focus-gold rounded">About</Link>
+              <Link href="/contact" className="px-4 py-2 text-sm font-medium text-navy-500 hover:text-gold-400 transition-colors focus-gold rounded">Contact</Link>
             </nav>
 
             {/* Right actions */}
@@ -124,7 +150,7 @@ export default function Header() {
               <Link href="/shop" className="hidden md:flex p-2 text-navy-500 hover:text-gold-400 transition-colors" aria-label="Search">
                 <Search size={20} />
               </Link>
-              <Link href="/enquiry" className="hidden md:flex btn-outline-gold py-2 px-4 text-xs">
+              <Link href="/bulk-enquiry" className="hidden sm:flex btn-outline-gold py-2 px-4 text-xs whitespace-nowrap">
                 Get a Quote
               </Link>
               <Link href="/cart" className="relative p-2 text-navy-500 hover:text-gold-400 transition-colors" aria-label="Cart">
@@ -148,38 +174,70 @@ export default function Header() {
         </div>
 
         {/* Mobile menu */}
-        {menuOpen && (
-          <div className="lg:hidden bg-white border-t" style={{ borderColor: '#C9A84C' }}>
-            <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
-              {[
-                { href: '/', label: 'Home' },
-                { href: '/shop', label: 'Shop All Products' },
-                { href: '/about', label: 'About Us' },
-                { href: '/enquiry', label: 'Get a Quote' },
-                { href: '/contact', label: 'Contact' },
-                { href: '/track-order', label: 'Track Order' },
-              ].map(({ href, label }) => (
-                <Link key={href} href={href}
-                  className="py-3 px-2 text-navy-500 font-medium border-b text-sm"
-                  style={{ borderColor: '#f1f1f1' }}
-                  onClick={() => setMenuOpen(false)}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="lg:hidden bg-white overflow-hidden"
+            >
+              <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-0 border-t" style={{ borderColor: 'rgba(201,168,76,0.3)' }}>
+                {[
+                  { href: '/',             label: 'Home' },
+                  { href: '/shop',         label: 'Shop All Products' },
+                  { href: '/about',        label: 'About Us' },
+                  { href: '/bulk-enquiry', label: 'Bulk Enquiry / Quote' },
+                  { href: '/contact',      label: 'Contact Us' },
+                  { href: '/track-order',  label: 'Track Order' },
+                ].map(({ href, label }) => (
+                  <Link key={href} href={href}
+                    className="min-h-[52px] flex items-center px-2 text-navy-500 font-medium border-b text-sm active:bg-gold-50 transition-colors"
+                    style={{ borderColor: '#f5f5f5' }}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {label}
+                  </Link>
+                ))}
+
+                <div className="pt-3 pb-1 font-semibold text-[10px] text-gold-400 uppercase tracking-widest px-2">
+                  Product Categories
+                </div>
+                {CATEGORIES.map((cat) => (
+                  <Link key={cat.id} href={`/shop?category=${cat.slug}`}
+                    className="min-h-[48px] flex items-center px-2 text-sm text-navy-600 border-b active:bg-gold-50 transition-colors"
+                    style={{ borderColor: '#f5f5f5' }}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {cat.name}
+                  </Link>
+                ))}
+
+                {/* Mobile CTA — safe-area bottom padding to avoid floating widget overlap */}
+                <div
+                  className="pt-4 flex gap-3"
+                  style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom, 16px))' }}
                 >
-                  {label}
-                </Link>
-              ))}
-              <div className="pt-3 font-semibold text-xs text-gold-400 uppercase tracking-widest">Categories</div>
-              {CATEGORIES.map((cat) => (
-                <Link key={cat.id} href={`/shop?category=${cat.slug}`}
-                  className="py-2 px-2 text-sm text-navy-600 border-b"
-                  style={{ borderColor: '#f1f1f1' }}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {cat.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
+                  <Link
+                    href="/bulk-enquiry"
+                    className="btn-gold rounded-xl flex-1 justify-center text-center text-sm"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Get a Quote
+                  </Link>
+                  <a
+                    href={`tel:${b.phonePrimary.replace(/\s/g, '')}`}
+                    className="btn-outline-gold rounded-xl px-4 flex items-center gap-2 shrink-0 min-w-[80px] justify-center"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <Phone size={15} /> <span className="text-sm">Call</span>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
     </>
   );

@@ -173,25 +173,61 @@ body {
 /* Headings */
 .heading-xl {
   font-family: var(--font-serif);
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.1;
   color: var(--color-navy-500);
+  letter-spacing: -0.02em;
 }
 .heading-lg {
   font-family: var(--font-serif);
-  font-size: clamp(1.875rem, 3vw, 2.5rem);
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
   color: var(--color-navy-500);
+  letter-spacing: -0.01em;
 }
 .heading-md {
   font-family: var(--font-serif);
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.2;
   color: var(--color-navy-500);
 }
+
+/* Glassmorphism & Modern Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(26, 35, 64, 0.05);
+}
+.glass-panel-dark {
+  background: rgba(26, 35, 64, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+.icon-glow {
+  position: relative;
+}
+.icon-glow::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: var(--color-gold-400);
+  filter: blur(8px);
+  opacity: 0.3;
+  border-radius: 50%;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+.icon-glow:hover::after {
+  opacity: 0.6;
+}
+
 
 /* Slider dots */
 .slider-dot {
@@ -255,6 +291,7 @@ body {
 }
 .input-field:focus {
   border-color: var(--color-gold-400);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
 }
 .input-label {
   display: block;
@@ -273,4 +310,158 @@ body {
 .card-hover:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(26,35,64,0.12);
+}
+
+/* ── Touch targets ──────────────────────────────────── */
+.btn-gold, .btn-navy, .btn-outline-gold, .btn-outline-white {
+  min-height: 44px;
+}
+
+/* ── Hover gold glow ────────────────────────────────── */
+.hover-gold-glow {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.hover-gold-glow:hover {
+  box-shadow: 0 0 0 1px rgba(201,168,76,0.2), 0 20px 50px rgba(201,168,76,0.12);
+}
+
+/* ── Gold gradient text ─────────────────────────────── */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #e8be4a 0%, #C9A84C 50%, #b8932a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Premium glass card ─────────────────────────────── */
+.glass-card {
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.65);
+  box-shadow: 0 4px 24px rgba(26,35,64,0.06), inset 0 1px 0 rgba(255,255,255,0.75);
+}
+
+/* ── Gold glow shadow ───────────────────────────────── */
+.gold-glow {
+  box-shadow: 0 0 24px rgba(201,168,76,0.2), 0 4px 16px rgba(201,168,76,0.1);
+}
+
+/* ── Floating card shadow ───────────────────────────── */
+.floating-soft {
+  box-shadow: 0 12px 40px rgba(26,35,64,0.09), 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* ── Section radial background ──────────────────────── */
+.section-radial-bg {
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(201,168,76,0.06) 0%, transparent 60%);
+}
+
+/* ── 44px tap-target helper ─────────────────────────── */
+.tap-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Gold focus ring ────────────────────────────────── */
+.focus-gold:focus-visible {
+  outline: 2px solid rgba(201,168,76,0.6);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Floating decorative icon ───────────────────────── */
+.floating-icon {
+  position: absolute;
+  animation: floatY 8s ease-in-out infinite;
+}
+
+/* ── Premium border gradient (pseudo-element) ───────── */
+.premium-border {
+  position: relative;
+  isolation: isolate;
+}
+.premium-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.45), rgba(232,190,74,0.12), rgba(201,168,76,0.45));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── CTA micro-interaction improvements ─────────────── */
+.btn-gold:focus-visible {
+  outline: 2px solid rgba(201,168,76,0.6);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.btn-navy:focus-visible,
+.btn-outline-gold:focus-visible,
+.btn-outline-white:focus-visible {
+  outline: 2px solid rgba(201,168,76,0.6);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Hero progress bar animation ─────────────────────── */
+@keyframes heroProgress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* ── Floating icon keyframe ──────────────────────────── */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px);    }
+  45%       { transform: translateY(-11px);  }
+  70%       { transform: translateY(-5px);   }
+}
+
+/* ── Subtle shimmer (card hover) ─────────────────────── */
+@keyframes shimmerPass {
+  from { transform: translateX(-100%) skewX(-12deg); }
+  to   { transform: translateX(250%)  skewX(-12deg); }
+}
+.card-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.card-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
+  transform: translateX(-100%) skewX(-12deg);
+  pointer-events: none;
+}
+.card-shimmer:hover::after {
+  animation: shimmerPass 0.65s ease forwards;
+}
+
+/* ── Reduced motion ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Active tap feedback (touch devices) ─────────────── */
+@media (hover: none) {
+  .btn-gold:active,
+  .btn-navy:active,
+  .btn-outline-gold:active,
+  .btn-outline-white:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+  }
 }

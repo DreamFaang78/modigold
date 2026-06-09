@@ -1,23 +1,23 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FloatingButtons from '@/components/FloatingButtons';
-import ContactView from '@/components/ContactView';
-import { getContent, getFooterContent, getContactPageContent } from '@/lib/content/store';
+import BulkEnquiryView from '@/components/BulkEnquiryView';
+import { getContent, getFooterContent, getBulkEnquiryPageContent } from '@/lib/content/store';
 
 export const dynamic = 'force-dynamic';
 
-export default async function ContactPage() {
-  const [content, footerContent, contactContent] = await Promise.all([
+export default async function BulkEnquiryPage() {
+  const [content, footerContent, bulkContent] = await Promise.all([
     getContent(),
     getFooterContent(),
-    getContactPageContent(),
+    getBulkEnquiryPageContent(),
   ]);
 
   return (
     <>
       <Header brand={content.brand} />
       <main>
-        <ContactView content={contactContent} />
+        <BulkEnquiryView content={bulkContent} />
       </main>
       <Footer brand={content.brand} footerContent={footerContent} />
       <FloatingButtons />
