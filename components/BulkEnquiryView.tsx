@@ -71,11 +71,17 @@ function BulkHero({ content }: { content: BulkEnquiryPageContent['hero'] }) {
             </p>
           )}
           <div
-            className="inline-flex items-center gap-2 text-xs px-4 py-2 rounded-full"
+            className="inline-flex items-center gap-2 text-xs px-4 py-2 rounded-full mb-5"
             style={{ background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)', color: '#e8be4a' }}
           >
             <Zap size={13} />
             {supportText}
+          </div>
+
+          <div>
+            <a href="#bulk-enquiry-form" className="btn-gold rounded-xl w-full sm:w-auto justify-center sm:hidden">
+              Fill Enquiry Form <ArrowRight size={16} />
+            </a>
           </div>
         </motion.div>
       </div>
@@ -305,41 +311,45 @@ function BulkEnquiryContent({ content }: { content: BulkEnquiryPageContent }) {
     <>
       <BulkHero content={content.hero} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-8 lg:gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16 w-full max-w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] lg:grid-rows-[auto_auto] gap-8 lg:gap-12">
 
-          {/* Benefits column */}
-          <div>
+          {/* Form — mobile: 1st, desktop: top-right */}
+          <div id="bulk-enquiry-form" className="order-1 lg:order-none lg:col-start-2 lg:row-start-1 w-full max-w-full scroll-mt-[90px]">
+            <Suspense fallback={<div className="h-96 bg-gray-50 rounded-3xl animate-pulse" />}>
+              <EnquiryFormInner formSection={content.form} />
+            </Suspense>
+          </div>
+
+          {/* Why Enquire benefit cards — mobile: 2nd, desktop: top-left */}
+          <div className="order-2 lg:order-none lg:col-start-1 lg:row-start-1">
             <h2 className="text-lg font-bold text-navy-500 mb-5">Why Enquire With Us?</h2>
             <div className="space-y-4">
               {content.benefits.filter((c) => c.isActive).map((card, i) => (
                 <BenefitCard key={card.id} card={card} index={i} />
               ))}
             </div>
-
-            {/* Contact CTA */}
-            <div
-              className="mt-6 rounded-2xl p-5"
-              style={{ background: '#f9fafb', border: '1px solid rgba(201,168,76,0.1)' }}
-            >
-              <p className="text-xs text-gray-500 mb-3 font-medium">Just want to talk?</p>
-              <a
-                href="tel:+919960937588"
-                className="inline-flex items-center gap-2 text-sm font-semibold transition-colors hover:opacity-80"
-                style={{ color: '#C9A84C' }}
-              >
-                <ArrowRight size={14} /> +91 9960 937 588
-              </a>
-              <div className="text-xs text-gray-400 mt-1">Mon–Sat, 9am–6pm IST</div>
-            </div>
           </div>
 
-          {/* Form column */}
-          <div>
-            <Suspense fallback={<div className="h-96 bg-gray-50 rounded-3xl animate-pulse" />}>
-              <EnquiryFormInner formSection={content.form} />
-            </Suspense>
+          {/* Trust strip — mobile: 3rd, desktop: bottom-right */}
+          <div className="order-3 lg:order-none lg:col-start-2 lg:row-start-2">
             <TrustStrip />
+          </div>
+
+          {/* Call CTA — mobile: 4th, desktop: bottom-left */}
+          <div
+            className="order-4 lg:order-none lg:col-start-1 lg:row-start-2 rounded-2xl p-5 h-fit"
+            style={{ background: '#f9fafb', border: '1px solid rgba(201,168,76,0.1)' }}
+          >
+            <p className="text-xs text-gray-500 mb-3 font-medium">Just want to talk?</p>
+            <a
+              href="tel:+919960937588"
+              className="inline-flex items-center gap-2 text-sm font-semibold transition-colors hover:opacity-80"
+              style={{ color: '#C9A84C' }}
+            >
+              <ArrowRight size={14} /> +91 9960 937 588
+            </a>
+            <div className="text-xs text-gray-400 mt-1">Mon–Sat, 9am–6pm IST</div>
           </div>
         </div>
       </div>

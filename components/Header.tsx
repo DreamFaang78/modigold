@@ -66,22 +66,19 @@ export default function Header({ brand }: { brand?: HeaderBrand }) {
           : { borderBottom: '1px solid rgba(201,168,76,0.08)' }
         }
       >
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-18 py-3">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 no-x-overflow">
+          <div className="flex items-center justify-between h-14 py-2 md:h-18 md:py-3 gap-2">
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 shrink-0">
-              <div
-                className="relative"
-                style={{ width: 120, height: 42 }}
-              >
+            <Link href="/" className="flex items-center gap-3 shrink-0 min-w-0">
+              <div className="relative shrink-0 w-[100px] h-[34px] md:w-[120px] md:h-[42px]">
                 <Image
                   src="https://www.modigold.in/wp-content/uploads/2021/12/Modi-Gold-Logo1-1.png"
                   alt="Modigold Pipes"
                   fill
                   className="object-contain"
                   priority
-                  sizes="(max-width: 768px) 120px, 160px"
+                  sizes="(max-width: 768px) 100px, 120px"
                 />
               </div>
             </Link>
@@ -146,24 +143,25 @@ export default function Header({ brand }: { brand?: HeaderBrand }) {
             </nav>
 
             {/* Right actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
               <Link href="/shop" className="hidden md:flex p-2 text-navy-500 hover:text-gold-400 transition-colors" aria-label="Search">
                 <Search size={20} />
               </Link>
-              <Link href="/bulk-enquiry" className="hidden sm:flex btn-outline-gold py-2 px-4 text-xs whitespace-nowrap">
-                Get a Quote
+              <Link href="/bulk-enquiry#bulk-enquiry-form" className="flex btn-outline-gold py-2 px-3 sm:px-4 text-xs whitespace-nowrap">
+                <span className="hidden sm:inline">Get a Quote</span>
+                <span className="sm:hidden">Quote</span>
               </Link>
-              <Link href="/cart" className="relative p-2 text-navy-500 hover:text-gold-400 transition-colors" aria-label="Cart">
+              <Link href="/cart" className="relative tap-target text-navy-500 hover:text-gold-400 transition-colors" aria-label="Cart">
                 <ShoppingCart size={22} />
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold"
+                  <span className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold"
                     style={{ background: '#C9A84C' }}>
                     {cartCount}
                   </span>
                 )}
               </Link>
               <button
-                className="lg:hidden p-2 text-navy-500"
+                className="lg:hidden tap-target text-navy-500"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-label="Menu"
               >
@@ -220,7 +218,7 @@ export default function Header({ brand }: { brand?: HeaderBrand }) {
                   style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom, 16px))' }}
                 >
                   <Link
-                    href="/bulk-enquiry"
+                    href="/bulk-enquiry#bulk-enquiry-form"
                     className="btn-gold rounded-xl flex-1 justify-center text-center text-sm"
                     onClick={() => setMenuOpen(false)}
                   >
