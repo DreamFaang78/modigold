@@ -66,7 +66,7 @@ export default function Header({ brand }: { brand?: HeaderBrand }) {
           : { borderBottom: '1px solid rgba(201,168,76,0.08)' }
         }
       >
-        <div className="max-w-7xl mx-auto px-4 md:px-6 no-x-overflow">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-14 py-2 md:h-18 md:py-3 gap-2">
 
             {/* Logo */}

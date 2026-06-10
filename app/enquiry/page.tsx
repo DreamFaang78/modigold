@@ -42,7 +42,7 @@ function EnquiryContent() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
 
             {/* Why enquire */}
-            <div>
+            <div className="hidden lg:block">
               <h2 className="heading-md mb-6">Why Enquire?</h2>
               <div className="space-y-5">
                 {[
