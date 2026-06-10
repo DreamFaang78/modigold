@@ -28,7 +28,7 @@ function BulkHero({ content }: { content: BulkEnquiryPageContent['hero'] }) {
 
   return (
     <div
-      className="relative overflow-hidden py-16 sm:py-20"
+      className="relative overflow-hidden py-8 sm:py-20"
       style={{ background: 'linear-gradient(135deg, #0d1425 0%, #1A2340 55%, #1e2d50 100%)' }}
     >
       {/* Mesh pattern */}
@@ -184,7 +184,7 @@ function EnquiryFormInner({ formSection }: { formSection: BulkEnquiryPageContent
       <div className="h-[3px]"
         style={{ background: 'linear-gradient(90deg, #1A2340, #C9A84C 50%, #1A2340)' }} />
 
-      <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-5" id="form">
+      <form onSubmit={handleSubmit} className="px-4 py-6 sm:p-8 space-y-5" id="form">
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-navy-500 mb-1" style={{ fontFamily: 'var(--font-playfair)' }}>
             {formSection.title}
@@ -311,11 +311,11 @@ function BulkEnquiryContent({ content }: { content: BulkEnquiryPageContent }) {
     <>
       <BulkHero content={content.hero} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16 w-full max-w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-16 w-full max-w-full">
         <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] lg:grid-rows-[auto_auto] gap-8 lg:gap-12">
 
           {/* Form — mobile: 1st, desktop: top-right */}
-          <div id="bulk-enquiry-form" className="order-1 lg:order-none lg:col-start-2 lg:row-start-1 w-full max-w-full scroll-mt-[90px]">
+          <div id="bulk-enquiry-form" className="order-1 lg:order-none lg:col-start-2 lg:row-start-1 w-full max-w-full scroll-mt-[88px] md:scroll-mt-[110px]">
             <Suspense fallback={<div className="h-96 bg-gray-50 rounded-3xl animate-pulse" />}>
               <EnquiryFormInner formSection={content.form} />
             </Suspense>
